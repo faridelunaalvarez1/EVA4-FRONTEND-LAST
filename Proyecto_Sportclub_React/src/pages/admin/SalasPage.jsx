@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Badge, Button, Card, Spinner, Table, Container } from "react-bootstrap";
+import { Badge, Button, Spinner, Table, Container } from "react-bootstrap";
 import Swal from "sweetalert2";
 import DashboardLayout from "../../layouts/DashboardLayout";
-import SalaFormModal from "../../components/salas/SalaFormModal"; // Crearemos este modal ahora
-// IMPORTANTE: Deberás tener un servicio creado para las salas, similar a userService.js
-import { getSalas, createSala, updateSala, deleteSala } from "../../services/salaService"; 
+import SalaFormModal from "../../components/salas/SalaFormModal"; 
+import { getSalas, createSala, updateSala, deleteSala } from "../../services/clubService"; 
 
 function SalasPage() {
   const [salas, setSalas] = useState([]);
@@ -16,7 +15,7 @@ function SalasPage() {
     try {
       setLoading(true);
       const data = await getSalas();
-      setSalas(data.data || data); // Depende de cómo venga tu API
+      setSalas(data.data || data); 
     } catch (error) {
       Swal.fire("Error", "No se pudieron cargar las salas", "error");
     } finally {
@@ -24,24 +23,11 @@ function SalasPage() {
     }
   };
 
-  useEffect(() => {
-    loadSalas();
-  }, []);
+  useEffect(() => { loadSalas(); }, []);
 
-  const openCreateModal = () => {
-    setSelectedSala(null);
-    setShowModal(true);
-  };
-
-  const openEditModal = (sala) => {
-    setSelectedSala(sala);
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-    setSelectedSala(null);
-  };
+  const openCreateModal = () => { setSelectedSala(null); setShowModal(true); };
+  const openEditModal = (sala) => { setSelectedSala(sala); setShowModal(true); };
+  const closeModal = () => { setShowModal(false); setSelectedSala(null); };
 
   const handleSave = async (formData) => {
     try {
@@ -53,7 +39,7 @@ function SalasPage() {
         Swal.fire("Creada", "Sala creada correctamente", "success");
       }
       closeModal();
-      loadSalas(); // Actualización automática de la interfaz
+      loadSalas(); 
     } catch (error) {
       Swal.fire("Error", "Ocurrió un problema al guardar", "error");
     }
@@ -99,13 +85,7 @@ function SalasPage() {
         ) : (
           <Table striped bordered hover responsive className="align-middle">
             <thead className="table-danger">
-              <tr>
-                <th>ID</th>
-                <th>Nombre de Sala</th>
-                <th>Capacidad</th>
-                <th>Estado</th>
-                <th className="text-center">Acciones</th>
-              </tr>
+              <tr><th>ID</th><th>Nombre de Sala</th><th>Capacidad</th><th>Estado</th><th className="text-center">Acciones</th></tr>
             </thead>
             <tbody>
               {salas.map((sala) => (
@@ -114,37 +94,19 @@ function SalasPage() {
                   <td className="fw-bold">{sala.nombre}</td>
                   <td>{sala.capacidad} personas</td>
                   <td>
-                    <Badge bg={sala.estado === "Activa" ? "success" : "secondary"}>
-                      {sala.estado}
-                    </Badge>
+                    <Badge bg={sala.estado === "Activa" ? "success" : "secondary"}>{sala.estado}</Badge>
                   </td>
                   <td className="text-center">
-                    <Button variant="outline-danger" size="sm" className="me-2" onClick={() => openEditModal(sala)}>
-                      Editar
-                    </Button>
-                    <Button variant="danger" size="sm" onClick={() => handleDelete(sala)}>
-                      Eliminar
-                    </Button>
+                    <Button variant="outline-danger" size="sm" className="me-2" onClick={() => openEditModal(sala)}>Editar</Button>
+                    <Button variant="danger" size="sm" onClick={() => handleDelete(sala)}>Eliminar</Button>
                   </td>
                 </tr>
               ))}
-              {salas.length === 0 && (
-                <tr>
-                  <td colSpan="5" className="text-center text-muted py-4">No hay salas registradas.</td>
-                </tr>
-              )}
             </tbody>
           </Table>
         )}
       </Container>
-
-      {/* Aquí renderizamos wujuu */}
-      <SalaFormModal
-        show={showModal}
-        handleClose={closeModal}
-        handleSave={handleSave}
-        selectedSala={selectedSala}
-      />
+      <SalaFormModal show={showModal} handleClose={closeModal} handleSave={handleSave} selectedSala={selectedSala} />
     </DashboardLayout>
   );
 }

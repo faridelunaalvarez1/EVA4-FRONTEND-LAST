@@ -1,12 +1,12 @@
-{/* Rutas para el Coach */}
-        <Route 
-          path="/coach/*" 
-          element={
-            <RoleRoute allowedRoles={["coach"]}>
-              <Routes>
-                <Route path="dashboard" element={<CoachDashboard />} />
-                <Route path="clases" element={<MisClasesPage />} />
-              </Routes>
-            </RoleRoute>
-          } 
-        />
+import React from 'react';
+
+const CoachDashboard = () => {
+  return (
+    <div>
+      <h1>Bienvenido al Panel de Coach</h1>
+      {/* Aquí va el contenido real de tu dashboard */}
+    </div>
+  );
+};
+
+export default CoachDashboard;

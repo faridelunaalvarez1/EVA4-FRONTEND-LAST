@@ -1,16 +1,17 @@
 import React from "react";
 import { Container, Row, Col, Nav, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../services/authService";
 
 function DashboardLayout({ children, role, title }) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Mapeo de colores según el rol usando clases de Bootstrap
   const sidebarColors = {
-    admin: "bg-danger",   // Rojo
-    coach: "bg-success",  // Verde
-    user: "bg-primary"    // Azul
+    admin: "bg-danger",
+    coach: "bg-success",
+    user: "bg-primary"
   };
 
   const bgColorClass = sidebarColors[role] || "bg-dark";
@@ -18,6 +19,13 @@ function DashboardLayout({ children, role, title }) {
   const handleLogout = () => {
     logout();
     navigate("/login");
+  };
+
+  // Función para darle el fondo blanco transparente al enlace activo
+  const getLinkClass = (path) => {
+    return location.pathname === path 
+      ? "text-white bg-opacity-25 bg-white rounded fw-bold" 
+      : "text-white";
   };
 
   return (
@@ -30,27 +38,34 @@ function DashboardLayout({ children, role, title }) {
           <Nav className="flex-column flex-grow-1 gap-2">
             {role === "admin" && (
               <>
-                <Nav.Link className="text-white bg-opacity-25 bg-white rounded" onClick={() => navigate("/admin/dashboard")}>Inicio</Nav.Link>
-                <Nav.Link className="text-white" onClick={() => navigate("/admin/users")}>Gestión de Usuarios</Nav.Link>
-                <Nav.Link className="text-white" onClick={() => navigate("/admin/sports")}>Gestión de Deportes</Nav.Link>
-                {/* Agrega aquí los enlaces a tus flujos de Admin */}
+                <Nav.Link className={getLinkClass("/admin/dashboard")} onClick={() => navigate("/admin/dashboard")}>Inicio</Nav.Link>
+                <Nav.Link className={getLinkClass("/admin/users")} onClick={() => navigate("/admin/users")}>Gestión de Usuarios</Nav.Link>
+                <Nav.Link className={getLinkClass("/admin/sports")} onClick={() => navigate("/admin/sports")}>Gestión de Deportes</Nav.Link>
+                <Nav.Link className={getLinkClass("/admin/salas")} onClick={() => navigate("/admin/salas")}>Gestión de Salas</Nav.Link>
+                <Nav.Link className={getLinkClass("/admin/asignaciones")} onClick={() => navigate("/admin/asignaciones")}>Gestión de Asignaciones</Nav.Link>
+                <Nav.Link className={getLinkClass("/admin/horarios")} onClick={() => navigate("/admin/horarios")}>Gestión de Horarios</Nav.Link>
               </>
             )}
+            
             {role === "coach" && (
               <>
-                <Nav.Link className="text-white bg-opacity-25 bg-white rounded" onClick={() => navigate("/coach/dashboard")}>Inicio</Nav.Link>
-                {/* Agrega aquí los enlaces a tus flujos de Coach */}
+                <Nav.Link className={getLinkClass("/coach/dashboard")} onClick={() => navigate("/coach/dashboard")}>Inicio</Nav.Link>
+                <Nav.Link className={getLinkClass("/coach/clases")} onClick={() => navigate("/coach/clases")}>Mis Clases</Nav.Link>
+                <Nav.Link className={getLinkClass("/coach/horario")} onClick={() => navigate("/coach/horario")}>Mi Horario</Nav.Link>
               </>
             )}
+            
             {role === "user" && (
               <>
-                <Nav.Link className="text-white bg-opacity-25 bg-white rounded" onClick={() => navigate("/user/dashboard")}>Inicio</Nav.Link>
-                {/* Agrega aquí los enlaces a tus flujos de Usuario */}
+                <Nav.Link className={getLinkClass("/user/dashboard")} onClick={() => navigate("/user/dashboard")}>Inicio</Nav.Link>
+                <Nav.Link className={getLinkClass("/user/clases-disponibles")} onClick={() => navigate("/user/clases-disponibles")}>Clases Disponibles</Nav.Link>
+                <Nav.Link className={getLinkClass("/user/crear-reserva")} onClick={() => navigate("/user/crear-reserva")}>Crear Reserva</Nav.Link>
+                <Nav.Link className={getLinkClass("/user/mis-reservas")} onClick={() => navigate("/user/mis-reservas")}>Mis Reservas</Nav.Link>
               </>
             )}
           </Nav>
 
-          <Button variant="outline-light" className="mt-auto w-100" onClick={handleLogout}>
+          <Button variant="outline-light" className="mt-auto w-100 fw-bold" onClick={handleLogout}>
             Cerrar sesión
           </Button>
         </Col>
@@ -60,7 +75,6 @@ function DashboardLayout({ children, role, title }) {
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="text-dark m-0 fw-bold">{title}</h2>
           </div>
-          {/* Aquí se renderiza la página que envuelvas (UsersPage, SportsPage, etc.) */}
           {children}
         </Col>
       </Row>

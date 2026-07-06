@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 
 const Register = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ name: "", email: "", password: "", role: "user" });
+  const [formData, setFormData] = useState({ full_name: "", email: "", password: "", role: "user" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -38,7 +38,7 @@ const Register = () => {
         <h2 className="text-3xl font-extrabold mb-6 text-center text-gray-800">Crear Cuenta</h2>
         {error && <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4 text-sm font-semibold text-center">{error}</div>}
         <form onSubmit={handleSubmit} className="space-y-5">
-          <input type="text" placeholder="Nombre completo" required className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" onChange={e => setFormData({...formData, name: e.target.value})} />
+          <input type="text" placeholder="Nombre completo" required className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" onChange={e => setFormData({...formData, full_name: e.target.value})} />
           <input type="email" placeholder="Correo electrónico" required className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" onChange={e => setFormData({...formData, email: e.target.value})} />
           <input type="password" placeholder="Contraseña" required className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" onChange={e => setFormData({...formData, password: e.target.value})} />
           <select className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" onChange={e => setFormData({...formData, role: e.target.value})} value={formData.role}>

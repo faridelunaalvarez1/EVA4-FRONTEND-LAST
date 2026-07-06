@@ -11,9 +11,9 @@ const DashboardLayout = ({ role }) => {
   };
 
   const getRoleColor = () => {
-    if (role === "admin") return "bg-red-800";
-    if (role === "coach") return "bg-blue-800";
-    return "bg-green-700";
+    if (role === "admin") return "bg-danger";
+    if (role === "coach") return "bg-primary";
+    return "bg-success";
   };
 
   const getRoleLinks = () => {
@@ -37,31 +37,42 @@ const DashboardLayout = ({ role }) => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100 font-sans">
-      <aside className={`w-64 text-white flex flex-col shadow-xl ${getRoleColor()}`}>
-        <div className="p-6 text-center border-b border-white/20">
-          <h2 className="text-2xl font-bold tracking-wider">SportClub</h2>
-          <div className="text-xs font-semibold uppercase mt-1 opacity-75">Panel de {role}</div>
+    <div className="d-flex vh-100">
+      <aside className={`text-white d-flex flex-column shadow ${getRoleColor()}`} style={{ width: "260px" }}>
+        <div className="p-4 text-center border-bottom border-light border-opacity-25">
+          <h2 className="fw-bold mb-1">SportClub</h2>
+          <div className="small text-uppercase opacity-75">Panel de {role}</div>
         </div>
-        
-        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+
+        <nav className="flex-grow-1 p-3 overflow-auto">
           {getRoleLinks().map((link) => (
-            <Link key={link.path} to={link.path} className="block px-4 py-3 rounded-lg hover:bg-white/20 transition-all font-medium">
+            <Link
+              key={link.path}
+              to={link.path}
+              className="d-block text-white text-decoration-none px-3 py-2 mb-1 rounded"
+              style={{ transition: "background-color 0.2s" }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.15)"}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
+            >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <div className="p-4 border-t border-white/20">
-          <button onClick={handleLogout} className="w-full bg-black/30 hover:bg-black/50 py-3 rounded-lg text-white font-bold transition-all shadow-md">
+        <div className="p-3 border-top border-light border-opacity-25">
+          <button
+            onClick={handleLogout}
+            className="btn w-100 fw-bold text-white"
+            style={{ backgroundColor: "rgba(0,0,0,0.3)" }}
+          >
             Cerrar Sesión
           </button>
         </div>
       </aside>
 
-      <main className="flex-1 overflow-y-auto p-8 bg-gray-50">
-        <div className="bg-white rounded-xl shadow-sm p-6 min-h-full border border-gray-100 relative">
-          <Outlet /> 
+      <main className="flex-grow-1 overflow-auto p-4 bg-light">
+        <div className="bg-white rounded shadow-sm p-4" style={{ minHeight: "100%" }}>
+          <Outlet />
         </div>
       </main>
     </div>

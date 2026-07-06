@@ -1,9 +1,8 @@
-﻿import React, { useState, useEffect } from "react";
+﻿import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Alert, Button, Card, Form, Spinner } from "react-bootstrap";
 import Swal from "sweetalert2";
 import logo from "../assets/logo_empresa_letra_v1.png";
-import { getSports } from "../services/sportService";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
@@ -22,23 +21,6 @@ const Register = () => {
   const [errors, setErrors] = useState({});
   const [generalError, setGeneralError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [sports, setSports] = useState([]);
-  const [loadingSports, setLoadingSports] = useState(true);
-
-  useEffect(() => {
-    const cargarDeportes = async () => {
-      try {
-        const data = await getSports();
-        const lista = data?.data || data || [];
-        setSports(Array.isArray(lista) ? lista : []);
-      } catch (err) {
-        setSports([]);
-      } finally {
-        setLoadingSports(false);
-      }
-    };
-    cargarDeportes();
-  }, []);
 
   const validar = () => {
     const nuevosErrores = {};
@@ -61,8 +43,8 @@ const Register = () => {
       nuevosErrores.birth_date = "La fecha de nacimiento es obligatoria.";
     }
 
-    if (!formData.sport_id) {
-      nuevosErrores.sport_id = "Seleccione un deporte de interes.";
+    if (!formData.sport_id.trim()) {
+      nuevosErrores.sport_id = "Indique un deporte de interes.";
     }
 
     if (!formData.password) {
@@ -100,7 +82,7 @@ const Register = () => {
         password: formData.password,
         role: formData.role,
         birth_date: formData.birth_date,
-        metadata: { sports: [Number(formData.sport_id)] }
+        metadata: { sports: [formData.sport_id.trim()] }
       };
 
       const response = await fetch("/api/auth/register", {
@@ -177,19 +159,13 @@ const Register = () => {
 
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Deporte de interes:</Form.Label>
-                    <Form.Select
+                    <Form.Control
+                      type="text"
+                      placeholder="Ej: Yoga, Futbol, Spinning..."
                       value={formData.sport_id}
                       isInvalid={!!errors.sport_id}
-                      disabled={loadingSports}
                       onChange={(e) => handleChange("sport_id", e.target.value)}
-                    >
-                      <option value="">
-                        {loadingSports ? "Cargando deportes..." : "Seleccione un deporte"}
-                      </option>
-                      {sports.map((sport) => (
-                        <option key={sport.id} value={sport.id}>{sport.name}</option>
-                      ))}
-                    </Form.Select>
+                    />
                     <Form.Control.Feedback type="invalid">{errors.sport_id}</Form.Control.Feedback>
                   </Form.Group>
 

@@ -28,7 +28,7 @@ function AsignacionesPage() {
   };
 
   const handleDelete = async (asig) => {
-    const result = await Swal.fire({ title: "¿Eliminar?", text: `Se borrará la asignación de ${asig.deporte}`, icon: "warning", showCancelButton: true, confirmButtonColor: "#d33", confirmButtonText: "Sí, eliminar" });
+    const result = await Swal.fire({ title: "¿Eliminar?", text: `Se borrará esta asignación`, icon: "warning", showCancelButton: true, confirmButtonColor: "#d33", confirmButtonText: "Sí, eliminar" });
     if (result.isConfirmed) {
       await deleteAsignacion(asig.id);
       Swal.fire("Eliminado", "", "success");
@@ -50,7 +50,10 @@ function AsignacionesPage() {
           <tbody>
             {asignaciones.map(a => (
               <tr key={a.id}>
-                <td>{a.id}</td><td className="fw-bold">{a.deporte}</td><td>{a.sala}</td><td>{a.coach}</td>
+                <td>{a.id}</td>
+                <td className="fw-bold">{a.sport?.name || "-"}</td>
+                <td>{a.room?.name || "-"}</td>
+                <td>{a.coach?.full_name || "-"}</td>
                 <td className="text-center">
                   <Button variant="outline-danger" size="sm" className="me-2" onClick={() => { setSelectedAsignacion(a); setShowModal(true); }}>Editar</Button>
                   <Button variant="danger" size="sm" onClick={() => handleDelete(a)}>Eliminar</Button>

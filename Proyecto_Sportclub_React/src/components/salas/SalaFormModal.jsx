@@ -3,31 +3,35 @@ import { Modal, Button, Form } from "react-bootstrap";
 
 function SalaFormModal({ show, handleClose, handleSave, selectedSala }) {
   const [formData, setFormData] = useState({
-    nombre: "",
-    capacidad: "",
-    estado: "Activa"
+    name: "",
+    capacity: "",
+    status: true
   });
 
   useEffect(() => {
     if (selectedSala) {
       setFormData({
-        nombre: selectedSala.nombre || "",
-        capacidad: selectedSala.capacidad || "",
-        estado: selectedSala.estado || "Activa"
+        name: selectedSala.name || "",
+        capacity: selectedSala.capacity || "",
+        status: selectedSala.status !== undefined ? selectedSala.status : true
       });
     } else {
-      setFormData({ nombre: "", capacidad: "", estado: "Activa" });
+      setFormData({ name: "", capacity: "", status: true });
     }
   }, [selectedSala, show]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    if (name === "status") {
+      setFormData({ ...formData, status: value === "true" });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    handleSave(formData);
+    handleSave({ ...formData, capacity: Number(formData.capacity) });
   };
 
   return (
@@ -39,18 +43,17 @@ function SalaFormModal({ show, handleClose, handleSave, selectedSala }) {
         <Modal.Body>
           <Form.Group className="mb-3">
             <Form.Label>Nombre de la Sala</Form.Label>
-            <Form.Control type="text" name="nombre" value={formData.nombre} onChange={handleChange} placeholder="Ej. Sala de Yoga" required />
+            <Form.Control type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Ej. Sala de Yoga" required />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Capacidad Máxima</Form.Label>
-            <Form.Control type="number" name="capacidad" value={formData.capacidad} onChange={handleChange} placeholder="Ej. 20" required />
+            <Form.Control type="number" name="capacity" value={formData.capacity} onChange={handleChange} placeholder="Ej. 20" required />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Estado</Form.Label>
-            <Form.Select name="estado" value={formData.estado} onChange={handleChange}>
-              <option value="Activa">Activa</option>
-              <option value="Inactiva">Inactiva</option>
-              <option value="Mantenimiento">Mantenimiento</option>
+            <Form.Select name="status" value={String(formData.status)} onChange={handleChange}>
+              <option value="true">Activa</option>
+              <option value="false">Inactiva</option>
             </Form.Select>
           </Form.Group>
         </Modal.Body>

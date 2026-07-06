@@ -47,7 +47,7 @@ function SalasPage() {
   const handleDelete = async (sala) => {
     const result = await Swal.fire({
       title: "¿Eliminar sala?",
-      text: `Esta acción eliminará la sala ${sala.nombre}`,
+      text: `Esta acción eliminará la sala ${sala.name}`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Sí, eliminar",
@@ -89,10 +89,10 @@ function SalasPage() {
             {salas.map((sala) => (
               <tr key={sala.id}>
                 <td>{sala.id}</td>
-                <td className="fw-bold">{sala.nombre}</td>
-                <td>{sala.capacidad} personas</td>
+                <td className="fw-bold">{sala.name}</td>
+                <td>{sala.capacity} personas</td>
                 <td>
-                  <Badge bg={sala.estado === "Activa" ? "success" : "secondary"}>{sala.estado}</Badge>
+                  <Badge bg={sala.status ? "success" : "secondary"}>{sala.status ? "Activa" : "Inactiva"}</Badge>
                 </td>
                 <td className="text-center">
                   <Button variant="outline-danger" size="sm" className="me-2" onClick={() => openEditModal(sala)}>Editar</Button>

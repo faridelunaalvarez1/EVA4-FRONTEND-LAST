@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table, Button, Spinner } from "react-bootstrap";
 import Swal from "sweetalert2";
-import DashboardLayout from "../../layouts/DashboardLayout";
 import AsignacionFormModal from "../../components/asignaciones/AsignacionesFormModal";
 import { getAsignaciones, createAsignacion, updateAsignacion, deleteAsignacion } from "../../services/clubService";
 
@@ -14,7 +13,7 @@ function AsignacionesPage() {
   const loadData = async () => {
     setLoading(true);
     const data = await getAsignaciones();
-    setAsignaciones(data);
+    setAsignaciones(data.data || data);
     setLoading(false);
   };
 
@@ -38,33 +37,31 @@ function AsignacionesPage() {
   };
 
   return (
-    <DashboardLayout role="admin" title="Gestión de Asignaciones">
-      <Container className="bg-white p-4 rounded shadow-sm">
-        <div className="d-flex justify-content-between mb-3">
-          <p className="text-muted m-0">Asigna deportes y coaches a las salas.</p>
-          <Button variant="danger" onClick={() => { setSelectedAsignacion(null); setShowModal(true); }}>+ Nueva Asignación</Button>
-        </div>
-        {loading ? <Spinner animation="border" variant="danger" /> : (
-          <Table striped bordered hover responsive className="align-middle">
-            <thead className="table-danger">
-              <tr><th>ID</th><th>Deporte</th><th>Sala</th><th>Coach</th><th className="text-center">Acciones</th></tr>
-            </thead>
-            <tbody>
-              {asignaciones.map(a => (
-                <tr key={a.id}>
-                  <td>{a.id}</td><td className="fw-bold">{a.deporte}</td><td>{a.sala}</td><td>{a.coach}</td>
-                  <td className="text-center">
-                    <Button variant="outline-danger" size="sm" className="me-2" onClick={() => { setSelectedAsignacion(a); setShowModal(true); }}>Editar</Button>
-                    <Button variant="danger" size="sm" onClick={() => handleDelete(a)}>Eliminar</Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        )}
-      </Container>
+    <Container className="bg-white p-4 rounded shadow-sm">
+      <div className="d-flex justify-content-between mb-3">
+        <p className="text-muted m-0">Asigna deportes y coaches a las salas.</p>
+        <Button variant="danger" onClick={() => { setSelectedAsignacion(null); setShowModal(true); }}>+ Nueva Asignación</Button>
+      </div>
+      {loading ? <Spinner animation="border" variant="danger" /> : (
+        <Table striped bordered hover responsive className="align-middle">
+          <thead className="table-danger">
+            <tr><th>ID</th><th>Deporte</th><th>Sala</th><th>Coach</th><th className="text-center">Acciones</th></tr>
+          </thead>
+          <tbody>
+            {asignaciones.map(a => (
+              <tr key={a.id}>
+                <td>{a.id}</td><td className="fw-bold">{a.deporte}</td><td>{a.sala}</td><td>{a.coach}</td>
+                <td className="text-center">
+                  <Button variant="outline-danger" size="sm" className="me-2" onClick={() => { setSelectedAsignacion(a); setShowModal(true); }}>Editar</Button>
+                  <Button variant="danger" size="sm" onClick={() => handleDelete(a)}>Eliminar</Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
       <AsignacionFormModal show={showModal} handleClose={() => setShowModal(false)} handleSave={handleSave} selectedAsignacion={selectedAsignacion} />
-    </DashboardLayout>
+    </Container>
   );
 }
 

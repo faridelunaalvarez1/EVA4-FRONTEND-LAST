@@ -51,19 +51,19 @@ export const deleteSala = async (id) => {
 // FLUJO 2: ASIGNACIONES (Admin)
 // ==========================================
 export const getAsignaciones = async () => {
-  const res = await fetch(`${API_URL}/asignaciones`, { headers: getHeaders() });
+  const res = await fetch(`${API_URL}/sport-rooms`, { headers: getHeaders() });
   return handleResponse(res);
 };
 export const createAsignacion = async (data) => {
-  const res = await fetch(`${API_URL}/asignaciones`, { method: "POST", headers: getHeaders(), body: JSON.stringify(data) });
+  const res = await fetch(`${API_URL}/sport-rooms`, { method: "POST", headers: getHeaders(), body: JSON.stringify(data) });
   return handleResponse(res);
 };
 export const updateAsignacion = async (id, data) => {
-  const res = await fetch(`${API_URL}/asignaciones/${id}`, { method: "PUT", headers: getHeaders(), body: JSON.stringify(data) });
+  const res = await fetch(`${API_URL}/sport-rooms/${id}`, { method: "PUT", headers: getHeaders(), body: JSON.stringify(data) });
   return handleResponse(res);
 };
 export const deleteAsignacion = async (id) => {
-  const res = await fetch(`${API_URL}/asignaciones/${id}`, { method: "DELETE", headers: getHeaders() });
+  const res = await fetch(`${API_URL}/sport-rooms/${id}`, { method: "DELETE", headers: getHeaders() });
   return handleResponse(res);
 };
 
@@ -71,19 +71,19 @@ export const deleteAsignacion = async (id) => {
 // FLUJO 3: HORARIOS (Admin)
 // ==========================================
 export const getHorarios = async () => {
-  const res = await fetch(`${API_URL}/horarios`, { headers: getHeaders() });
+  const res = await fetch(`${API_URL}/class-schedules`, { headers: getHeaders() });
   return handleResponse(res);
 };
 export const createHorario = async (data) => {
-  const res = await fetch(`${API_URL}/horarios`, { method: "POST", headers: getHeaders(), body: JSON.stringify(data) });
+  const res = await fetch(`${API_URL}/class-schedules`, { method: "POST", headers: getHeaders(), body: JSON.stringify(data) });
   return handleResponse(res);
 };
 export const updateHorario = async (id, data) => {
-  const res = await fetch(`${API_URL}/horarios/${id}`, { method: "PUT", headers: getHeaders(), body: JSON.stringify(data) });
+  const res = await fetch(`${API_URL}/class-schedules/${id}`, { method: "PUT", headers: getHeaders(), body: JSON.stringify(data) });
   return handleResponse(res);
 };
 export const deleteHorario = async (id) => {
-  const res = await fetch(`${API_URL}/horarios/${id}`, { method: "DELETE", headers: getHeaders() });
+  const res = await fetch(`${API_URL}/class-schedules/${id}`, { method: "DELETE", headers: getHeaders() });
   return handleResponse(res);
 };
 

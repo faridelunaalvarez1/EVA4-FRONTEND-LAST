@@ -15,6 +15,7 @@ import HorariosPage from "../pages/admin/HorariosPage";
 // Vistas de Coach
 import CoachDashboard from "../pages/coach/CoachDashboard";
 import MisClasesPage from "../pages/coach/MisClasesPage";
+import MiHorarioPage from "../pages/coach/MiHorarioPage";
 // Vistas de User
 import UserDashboard from "../pages/user/UserDashboard";
 import ClasesDisponiblesPage from "../pages/user/ClasesDisponiblesPage";
@@ -42,7 +43,7 @@ const AppRoutes = () => {
       <Route path="/coach" element={<RoleRoute allowedRoles={["coach"]}><DashboardLayout role="coach" /></RoleRoute>}>
         <Route path="dashboard" element={<CoachDashboard />} />
         <Route path="clases" element={<MisClasesPage />} />
-        <Route path="horario" element={<MisClasesPage />} />
+        <Route path="horario" element={<MiHorarioPage />} />
         <Route path="perfil" element={<PerfilPage />} />
       </Route>
       {/* RUTAS DE USUARIO */}

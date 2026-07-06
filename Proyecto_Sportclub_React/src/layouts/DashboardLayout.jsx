@@ -77,7 +77,7 @@ const DashboardLayout = ({ role }) => {
       </aside>
 
       <main className="flex-grow-1 overflow-auto p-4" style={{ backgroundColor: getContentBg() }}>
-        <div className="bg-white rounded shadow-sm p-4" style={{ minHeight: "100%" }}>
+        <div className="rounded shadow-sm p-4" style={{ minHeight: "100%", backgroundColor: getContentBg() }}>
           <Outlet />
         </div>
       </main>

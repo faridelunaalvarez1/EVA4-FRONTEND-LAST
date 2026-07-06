@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { Container, Table, Button, Badge, Spinner, Alert } from "react-bootstrap";
 import Swal from "sweetalert2";
 import { getMisReservas, cancelarReserva } from "../../services/clubService";
@@ -27,16 +27,14 @@ function MisReservasPage() {
 
   const handleCancelar = async (reserva) => {
     const confirm = await Swal.fire({
-      title: "¿Cancelar reserva?",
-      text: "Esta acción no se puede deshacer.",
+      title: "Cancelar reserva?",
+      text: "Esta accion no se puede deshacer.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Sí, cancelar",
+      confirmButtonText: "Si, cancelar",
       cancelButtonText: "Volver",
     });
-
     if (!confirm.isConfirmed) return;
-
     try {
       await cancelarReserva(reserva.id);
       Swal.fire("Cancelada", "Tu reserva fue cancelada.", "success");
@@ -46,11 +44,13 @@ function MisReservasPage() {
     }
   };
 
+  const esCancelada = (status) => status === "cancelled" || status === "cancelada" || status === "cancelled_by_user";
+
   const renderEstado = (status) => {
-    if (status === "confirmed" || status === "confirmada") {
-      return <Badge bg="success">Confirmada</Badge>;
+    if (status === "active" || status === "confirmed" || status === "confirmada") {
+      return <Badge bg="success">Activa</Badge>;
     }
-    if (status === "cancelled" || status === "cancelada") {
+    if (esCancelada(status)) {
       return <Badge bg="secondary">Cancelada</Badge>;
     }
     return <Badge bg="warning">{status}</Badge>;
@@ -59,15 +59,14 @@ function MisReservasPage() {
   return (
     <Container className="bg-white p-4 rounded shadow-sm">
       <p className="text-muted mb-4">Revisa las clases que has reservado o cancela tu asistencia.</p>
-
       {loading && <Spinner animation="border" />}
       {error && <Alert variant="danger">{error}</Alert>}
-
       {!loading && !error && (
         <Table hover responsive className="align-middle">
           <thead className="table-primary">
             <tr>
               <th>Deporte</th>
+              <th>Sala</th>
               <th>Coach</th>
               <th>Horario</th>
               <th>Estado</th>
@@ -77,34 +76,36 @@ function MisReservasPage() {
           <tbody>
             {reservas.length === 0 && (
               <tr>
-                <td colSpan={5} className="text-center text-muted">
-                  No tienes reservas todavía.
+                <td colSpan={6} className="text-center text-muted">
+                  No tienes reservas todavia.
                 </td>
               </tr>
             )}
-            {reservas.map((reserva) => (
-              <tr key={reserva.id}>
-                <td className="fw-bold">
-                  {reserva.class_schedule?.sport_room?.sport?.name || "-"}
-                </td>
-                <td>{reserva.class_schedule?.sport_room?.coach?.full_name || "-"}</td>
-                <td>
-                  {reserva.class_schedule?.start_time} - {reserva.class_schedule?.end_time}
-                </td>
-                <td>{renderEstado(reserva.status)}</td>
-                <td className="text-center">
-                  {reserva.status !== "cancelled" && reserva.status !== "cancelada" && (
-                    <Button
-                      variant="outline-danger"
-                      size="sm"
-                      onClick={() => handleCancelar(reserva)}
-                    >
-                      Cancelar Reserva
-                    </Button>
-                  )}
-                </td>
-              </tr>
-            ))}
+            {reservas.map((reserva) => {
+              const sportRoom = reserva.classSchedule?.sportRoom;
+              return (
+                <tr key={reserva.id}>
+                  <td className="fw-bold">{sportRoom?.sport?.name || "-"}</td>
+                  <td>{sportRoom?.room?.name || "-"}</td>
+                  <td>{sportRoom?.coach?.email || "-"}</td>
+                  <td>
+                    {reserva.classSchedule?.start_time} - {reserva.classSchedule?.end_time}
+                  </td>
+                  <td>{renderEstado(reserva.status)}</td>
+                  <td className="text-center">
+                    {!esCancelada(reserva.status) && (
+                      <Button
+                        variant="outline-danger"
+                        size="sm"
+                        onClick={() => handleCancelar(reserva)}
+                      >
+                        Cancelar Reserva
+                      </Button>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </Table>
       )}

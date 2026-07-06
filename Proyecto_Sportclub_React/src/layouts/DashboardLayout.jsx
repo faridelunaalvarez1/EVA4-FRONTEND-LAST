@@ -10,10 +10,10 @@ const DashboardLayout = ({ role }) => {
     navigate("/login");
   };
 
-  const getRoleColor = () => {
-    if (role === "admin") return "bg-danger";
-    if (role === "coach") return "bg-primary";
-    return "bg-success";
+  const getRoleStyle = () => {
+    if (role === "admin") return { backgroundColor: "#a12a2a" };
+    if (role === "coach") return { backgroundColor: "#1e5aa8" };
+    return { backgroundColor: "#1a7a4c" };
   };
 
   const getRoleLinks = () => {
@@ -38,7 +38,7 @@ const DashboardLayout = ({ role }) => {
 
   return (
     <div className="d-flex vh-100">
-      <aside className={`text-white d-flex flex-column shadow ${getRoleColor()}`} style={{ width: "260px" }}>
+      <aside className="text-white d-flex flex-column shadow" style={{ width: "260px", ...getRoleStyle() }}>
         <div className="p-4 text-center border-bottom border-light border-opacity-25">
           <h2 className="fw-bold mb-1">SportClub</h2>
           <div className="small text-uppercase opacity-75">Panel de {role}</div>
@@ -70,7 +70,7 @@ const DashboardLayout = ({ role }) => {
         </div>
       </aside>
 
-      <main className="flex-grow-1 overflow-auto p-4 bg-light">
+      <main className="flex-grow-1 overflow-auto p-4" style={{ backgroundColor: "#f4f5f7" }}>
         <div className="bg-white rounded shadow-sm p-4" style={{ minHeight: "100%" }}>
           <Outlet />
         </div>

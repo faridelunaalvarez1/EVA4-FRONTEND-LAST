@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Outlet, useNavigate, Link } from "react-router-dom";
 import { logout } from "../services/authService";
 
@@ -25,20 +25,24 @@ const DashboardLayout = ({ role }) => {
   const getRoleLinks = () => {
     if (role === "admin") return [
       { path: "/admin/dashboard", label: "Inicio Admin" },
-      { path: "/admin/users", label: "Gestión de Usuarios" },
-      { path: "/admin/sports", label: "Gestión Deportes" },
-      { path: "/admin/salas", label: "Gestión Salas" },
+      { path: "/admin/users", label: "Gestion de Usuarios" },
+      { path: "/admin/sports", label: "Gestion Deportes" },
+      { path: "/admin/salas", label: "Gestion Salas" },
       { path: "/admin/asignaciones", label: "Asignaciones" },
-      { path: "/admin/horarios", label: "Horarios" }
+      { path: "/admin/horarios", label: "Horarios" },
+      { path: "/admin/perfil", label: "Mi Perfil" }
     ];
     if (role === "coach") return [
       { path: "/coach/dashboard", label: "Inicio Coach" },
-      { path: "/coach/clases", label: "Mis Clases" }
+      { path: "/coach/clases", label: "Mis Clases" },
+      { path: "/coach/horario", label: "Mi Horario" },
+      { path: "/coach/perfil", label: "Mi Perfil" }
     ];
     return [
       { path: "/user/dashboard", label: "Inicio Usuario" },
       { path: "/user/clases-disponibles", label: "Clases Disponibles" },
-      { path: "/user/mis-reservas", label: "Mis Reservas" }
+      { path: "/user/mis-reservas", label: "Mis Reservas" },
+      { path: "/user/perfil", label: "Mi Perfil" }
     ];
   };
 
@@ -71,7 +75,7 @@ const DashboardLayout = ({ role }) => {
             className="btn w-100 fw-bold text-white"
             style={{ backgroundColor: "rgba(0,0,0,0.3)" }}
           >
-            Cerrar Sesión
+            Cerrar Sesion
           </button>
         </div>
       </aside>

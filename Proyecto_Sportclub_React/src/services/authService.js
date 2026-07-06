@@ -1,4 +1,4 @@
-const API_URL = "/api/auth";
+﻿const API_URL = "/api/auth";
 
 // Login contra el backend
 export async function loginUser(credentials) {
@@ -13,13 +13,13 @@ export async function loginUser(credentials) {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.message || "Error al iniciar sesión");
+    throw new Error(data.message || "Error al iniciar sesion");
   }
 
   return data;
 }
 
-// Guardar sesión en el almacenamiento local del navegador (localStorage)
+// Guardar sesion en el almacenamiento local del navegador (localStorage)
 export function saveSession(token, user) {
   localStorage.setItem("token", token);
   localStorage.setItem("user", JSON.stringify(user));
@@ -36,13 +36,31 @@ export function getUser() {
   return user ? JSON.parse(user) : null;
 }
 
-// Verificar de forma rápida si existe una sesión activa
+// Verificar de forma rapida si existe una sesion activa
 export function isAuthenticated() {
   return Boolean(getToken());
 }
 
-// Borrar el token y cerrar sesión de inmediato
+// Borrar el token y cerrar sesion de inmediato
 export function logout() {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
+}
+
+// Obtener el perfil actualizado directo desde el backend
+export async function getMe() {
+  const response = await fetch(`${API_URL}/me`, {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${getToken()}`
+    }
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Error al obtener el perfil");
+  }
+
+  return data;
 }

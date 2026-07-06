@@ -97,23 +97,23 @@ function SportsPage() {
   };
 
   return (
-    <Card className="shadow-sm border-0 rounded-3 mt-4">
+    <Card className="shadow-sm border-0 rounded-3">
       <Card.Header className="bg-white d-flex justify-content-between align-items-center py-3">
         <h4 className="mb-0 fw-bold text-dark">Gestión de Deportes</h4>
         <div className="d-flex gap-2">
-          <Button variant="outline-secondary" onClick={loadSports}>Refrescar</Button>
-          <Button variant="primary" onClick={openCreateModal}>+ Nuevo Deporte</Button>
+          <Button variant="outline-danger" onClick={loadSports}>Refrescar</Button>
+          <Button variant="danger" onClick={openCreateModal}>+ Nuevo Deporte</Button>
         </div>
       </Card.Header>
       <Card.Body className="p-4">
         {loading ? (
           <div className="text-center p-5">
-            <Spinner animation="border" variant="primary" />
+            <Spinner animation="border" variant="danger" />
             <p className="mt-2 text-muted">Cargando deportes...</p>
           </div>
         ) : (
           <Table responsive striped bordered hover className="align-middle">
-            <thead className="table-dark">
+            <thead className="table-danger">
               <tr>
                 <th>ID</th>
                 <th>Nombre</th>
@@ -141,7 +141,7 @@ function SportsPage() {
                   </td>
                   <td>{formatDate(sport.created_at)}</td>
                   <td>
-                    <Button variant="warning" size="sm" className="me-2" onClick={() => openEditModal(sport)}>
+                    <Button variant="outline-danger" size="sm" className="me-2" onClick={() => openEditModal(sport)}>
                       Editar
                     </Button>
                     <Button variant="danger" size="sm" onClick={() => handleDelete(sport)}>

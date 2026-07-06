@@ -4,6 +4,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 function SalaFormModal({ show, handleClose, handleSave, selectedSala }) {
   const [formData, setFormData] = useState({
     name: "",
+    description: "",
     capacity: "",
     status: true
   });
@@ -12,11 +13,12 @@ function SalaFormModal({ show, handleClose, handleSave, selectedSala }) {
     if (selectedSala) {
       setFormData({
         name: selectedSala.name || "",
+        description: selectedSala.description || "",
         capacity: selectedSala.capacity || "",
         status: selectedSala.status !== undefined ? selectedSala.status : true
       });
     } else {
-      setFormData({ name: "", capacity: "", status: true });
+      setFormData({ name: "", description: "", capacity: "", status: true });
     }
   }, [selectedSala, show]);
 
@@ -44,6 +46,10 @@ function SalaFormModal({ show, handleClose, handleSave, selectedSala }) {
           <Form.Group className="mb-3">
             <Form.Label>Nombre de la Sala</Form.Label>
             <Form.Control type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Ej. Sala de Yoga" required />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Descripción</Form.Label>
+            <Form.Control type="text" name="description" value={formData.description} onChange={handleChange} placeholder="Ej. Sala equipada con espejos y colchonetas" required />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Capacidad Máxima</Form.Label>

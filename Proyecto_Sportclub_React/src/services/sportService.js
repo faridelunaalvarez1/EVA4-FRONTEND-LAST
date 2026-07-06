@@ -1,4 +1,4 @@
-const API_URL = "/api/sport";
+const API_URL = "/api/sports";
 
 function getToken() {
   return localStorage.getItem("token");

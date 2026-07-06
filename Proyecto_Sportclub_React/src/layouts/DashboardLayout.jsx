@@ -16,6 +16,12 @@ const DashboardLayout = ({ role }) => {
     return { backgroundColor: "#1a7a4c" };
   };
 
+  const getContentBg = () => {
+    if (role === "admin") return "#f7e9e9";
+    if (role === "coach") return "#e8eef6";
+    return "#e8f3ec";
+  };
+
   const getRoleLinks = () => {
     if (role === "admin") return [
       { path: "/admin/dashboard", label: "Inicio Admin" },
@@ -70,7 +76,7 @@ const DashboardLayout = ({ role }) => {
         </div>
       </aside>
 
-      <main className="flex-grow-1 overflow-auto p-4" style={{ backgroundColor: "#f4f5f7" }}>
+      <main className="flex-grow-1 overflow-auto p-4" style={{ backgroundColor: getContentBg() }}>
         <div className="bg-white rounded shadow-sm p-4" style={{ minHeight: "100%" }}>
           <Outlet />
         </div>

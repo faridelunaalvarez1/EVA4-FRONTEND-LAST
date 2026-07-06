@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/api/sport";
+const API_URL = "/api/sport";
 
 function getToken() {
   return localStorage.getItem("token");

@@ -1,7 +1,6 @@
-// src/services/clubService.js
 
-// Utilizando la variable de entorno según los requerimientos de la guía
-const API_URL = import.meta.env.VITE_API_URL;
+
+const API_URL = "/api";
 
 // Función auxiliar para obtener los encabezados (headers)
 const getHeaders = () => {

@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/api/auth"; // Se ajustará a tu backend real después
+const API_URL = "/api/auth";
 
 // Login contra el backend
 export async function loginUser(credentials) {

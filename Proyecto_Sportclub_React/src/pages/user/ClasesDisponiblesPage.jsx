@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Container, Table, Button, Badge, Spinner, Alert } from "react-bootstrap";
+import { Container, Table, Button, Spinner, Alert } from "react-bootstrap";
 import Swal from "sweetalert2";
 import { getClasesDisponibles, crearReserva } from "../../services/clubService";
 
+const DIAS = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+
 function ClasesDisponiblesPage() {
-  const [clases, setClases] = useState([]);
+  const [filas, setFilas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -12,8 +14,28 @@ function ClasesDisponiblesPage() {
     setLoading(true);
     setError(null);
     try {
-      const data = await getClasesDisponibles();
-      setClases(Array.isArray(data) ? data : []);
+      const asignaciones = await getClasesDisponibles();
+      const lista = Array.isArray(asignaciones) ? asignaciones : [];
+
+      // Cada asignación puede tener varios horarios (schedules).
+      // Aplanamos: una fila por cada horario disponible.
+      const filasAplanadas = [];
+      lista.forEach((asignacion) => {
+        const schedules = asignacion.schedules || [];
+        schedules.forEach((sch) => {
+          filasAplanadas.push({
+            scheduleId: sch.id,
+            sport: asignacion.sport?.name || "-",
+            coach: asignacion.coach?.full_name || asignacion.coach?.email || "-",
+            room: asignacion.room?.name || "-",
+            day: DIAS[sch.day_of_week] ?? sch.day_of_week,
+            start: sch.start_time,
+            end: sch.end_time,
+          });
+        });
+      });
+
+      setFilas(filasAplanadas);
     } catch (err) {
       setError("No se pudieron cargar las clases disponibles.");
     } finally {
@@ -25,10 +47,10 @@ function ClasesDisponiblesPage() {
     cargarClases();
   }, []);
 
-  const handleReservar = async (clase) => {
+  const handleReservar = async (fila) => {
     const confirm = await Swal.fire({
       title: "¿Confirmar reserva?",
-      text: `Vas a reservar: ${clase.sport_room?.sport?.name || "esta clase"}`,
+      text: `Vas a reservar: ${fila.sport} (${fila.day} ${fila.start})`,
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Sí, reservar",
@@ -38,7 +60,7 @@ function ClasesDisponiblesPage() {
     if (!confirm.isConfirmed) return;
 
     try {
-      await crearReserva(clase.id);
+      await crearReserva(fila.scheduleId);
       Swal.fire("¡Reservado!", "Tu cupo fue reservado con éxito.", "success");
       cargarClases();
     } catch (err) {
@@ -59,27 +81,29 @@ function ClasesDisponiblesPage() {
             <tr>
               <th>Deporte</th>
               <th>Coach</th>
+              <th>Día</th>
               <th>Horario</th>
               <th>Sala</th>
               <th className="text-center">Reserva</th>
             </tr>
           </thead>
           <tbody>
-            {clases.length === 0 && (
+            {filas.length === 0 && (
               <tr>
-                <td colSpan={5} className="text-center text-muted">
-                  No hay clases disponibles por el momento.
+                <td colSpan={6} className="text-center text-muted">
+                  No hay clases disponibles con horario asignado por el momento.
                 </td>
               </tr>
             )}
-            {clases.map((clase) => (
-              <tr key={clase.id}>
-                <td className="fw-bold">{clase.sport_room?.sport?.name || "-"}</td>
-                <td>{clase.sport_room?.coach?.full_name || "-"}</td>
-                <td>{clase.start_time} - {clase.end_time}</td>
-                <td>{clase.sport_room?.room?.name || "-"}</td>
+            {filas.map((fila) => (
+              <tr key={fila.scheduleId}>
+                <td className="fw-bold">{fila.sport}</td>
+                <td>{fila.coach}</td>
+                <td>{fila.day}</td>
+                <td>{fila.start} - {fila.end}</td>
+                <td>{fila.room}</td>
                 <td className="text-center">
-                  <Button variant="primary" size="sm" onClick={() => handleReservar(clase)}>
+                  <Button variant="primary" size="sm" onClick={() => handleReservar(fila)}>
                     Reservar Cupo
                   </Button>
                 </td>

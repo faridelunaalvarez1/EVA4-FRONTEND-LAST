@@ -5,20 +5,17 @@ import { logout } from "../services/authService";
 const DashboardLayout = ({ role }) => {
   const navigate = useNavigate();
 
-  // Función para cerrar sesión
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
 
-  // Colores dinámicos para cumplir la rúbrica de UX/UI
   const getRoleColor = () => {
     if (role === "admin") return "bg-red-800";
     if (role === "coach") return "bg-blue-800";
-    return "bg-green-700"; // usuario normal
+    return "bg-green-700";
   };
 
-  // Enlaces del menú lateral dinámicos
   const getRoleLinks = () => {
     if (role === "admin") return [
       { path: "/admin/dashboard", label: "Inicio Admin" },
@@ -41,42 +38,29 @@ const DashboardLayout = ({ role }) => {
 
   return (
     <div className="flex h-screen bg-gray-100 font-sans">
-      {/* Menú Lateral (Sidebar) */}
       <aside className={`w-64 text-white flex flex-col shadow-xl ${getRoleColor()}`}>
         <div className="p-6 text-center border-b border-white/20">
           <h2 className="text-2xl font-bold tracking-wider">SportClub</h2>
-          <div className="text-xs font-semibold uppercase mt-1 opacity-75">
-            Panel de {role}
-          </div>
+          <div className="text-xs font-semibold uppercase mt-1 opacity-75">Panel de {role}</div>
         </div>
         
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
           {getRoleLinks().map((link) => (
-            <Link 
-              key={link.path} 
-              to={link.path} 
-              className="block px-4 py-3 rounded-lg hover:bg-white/20 transition-all font-medium"
-            >
+            <Link key={link.path} to={link.path} className="block px-4 py-3 rounded-lg hover:bg-white/20 transition-all font-medium">
               {link.label}
             </Link>
           ))}
         </nav>
 
-        {/* Botón Salir */}
         <div className="p-4 border-t border-white/20">
-          <button 
-            onClick={handleLogout} 
-            className="w-full bg-black/30 hover:bg-black/50 py-3 rounded-lg text-white font-bold transition-all shadow-md"
-          >
+          <button onClick={handleLogout} className="w-full bg-black/30 hover:bg-black/50 py-3 rounded-lg text-white font-bold transition-all shadow-md">
             Cerrar Sesión
           </button>
         </div>
       </aside>
 
-      {/* Contenido Principal de las Páginas */}
       <main className="flex-1 overflow-y-auto p-8 bg-gray-50">
-        <div className="bg-white rounded-xl shadow-sm p-6 min-h-full border border-gray-100">
-           {/* Aquí se inyectan dinámicamente las páginas (Salas, Usuarios, etc) */}
+        <div className="bg-white rounded-xl shadow-sm p-6 min-h-full border border-gray-100 relative">
           <Outlet /> 
         </div>
       </main>

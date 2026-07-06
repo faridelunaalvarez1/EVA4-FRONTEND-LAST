@@ -6,7 +6,7 @@ import Unauthorized from "../pages/Unauthorized";
 import RoleRoute from "./RoleRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
 
-// Admin
+// Vistas de Admin
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import UsersPage from "../pages/admin/UsersPage";
 import SportsPage from "../pages/admin/SportsPage";
@@ -14,11 +14,11 @@ import SalasPage from "../pages/admin/SalasPage";
 import AsignacionesPage from "../pages/admin/AsignacionesPage";
 import HorariosPage from "../pages/admin/HorariosPage";
 
-// Coach
+// Vistas de Coach
 import CoachDashboard from "../pages/coach/CoachDashboard";
 import MisClasesPage from "../pages/coach/MisClasesPage";
 
-// User
+// Vistas de User
 import UserDashboard from "../pages/user/UserDashboard";
 import ClasesDisponiblesPage from "../pages/user/ClasesDisponiblesPage";
 import MisReservasPage from "../pages/user/MisReservasPage";
@@ -31,7 +31,7 @@ const AppRoutes = () => {
       <Route path="/register" element={<Register />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
 
-      {/* RUTAS DE ADMINISTRADOR */}
+      {/* RUTAS DE ADMINISTRADOR (Anidadas en el Layout) */}
       <Route path="/admin" element={<RoleRoute allowedRoles={["admin"]}><DashboardLayout role="admin" /></RoleRoute>}>
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="users" element={<UsersPage />} />
@@ -56,7 +56,6 @@ const AppRoutes = () => {
         <Route path="mis-reservas" element={<MisReservasPage />} />
       </Route>
 
-      {/* Ruta comodín si el usuario escribe algo mal */}
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );

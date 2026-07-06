@@ -13,19 +13,16 @@ const Register = () => {
     setLoading(true);
 
     try {
-      // Ruta relativa para que AWS y Nginx lo redirijan al backend
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)
       });
-
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Error al intentar registrarse");
+        throw new Error(data.message || "Error al registrarse");
       }
-
       alert("Registro exitoso. Ahora puedes iniciar sesión.");
       navigate("/login");
     } catch (err) {
@@ -39,56 +36,21 @@ const Register = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-200">
       <div className="bg-white p-10 rounded-xl shadow-2xl w-96">
         <h2 className="text-3xl font-extrabold mb-6 text-center text-gray-800">Crear Cuenta</h2>
-        
-        {error && (
-          <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4 text-sm font-semibold text-center">
-            {error}
-          </div>
-        )}
-
+        {error && <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4 text-sm font-semibold text-center">{error}</div>}
         <form onSubmit={handleSubmit} className="space-y-5">
-          <input 
-            type="text" 
-            placeholder="Nombre completo" 
-            required 
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
-            onChange={e => setFormData({...formData, name: e.target.value})} 
-          />
-          <input 
-            type="email" 
-            placeholder="Correo electrónico" 
-            required 
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
-            onChange={e => setFormData({...formData, email: e.target.value})} 
-          />
-          <input 
-            type="password" 
-            placeholder="Contraseña" 
-            required 
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
-            onChange={e => setFormData({...formData, password: e.target.value})} 
-          />
-          <select 
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" 
-            onChange={e => setFormData({...formData, role: e.target.value})} 
-            value={formData.role}
-          >
+          <input type="text" placeholder="Nombre completo" required className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" onChange={e => setFormData({...formData, name: e.target.value})} />
+          <input type="email" placeholder="Correo electrónico" required className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" onChange={e => setFormData({...formData, email: e.target.value})} />
+          <input type="password" placeholder="Contraseña" required className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" onChange={e => setFormData({...formData, password: e.target.value})} />
+          <select className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" onChange={e => setFormData({...formData, role: e.target.value})} value={formData.role}>
             <option value="user">Usuario</option>
             <option value="coach">Entrenador</option>
           </select>
-
-          <button 
-            disabled={loading} 
-            className="w-full bg-blue-600 text-white p-3 rounded-lg font-bold hover:bg-blue-700 disabled:opacity-50 transition-all shadow-md mt-4"
-          >
+          <button disabled={loading} className="w-full bg-blue-600 text-white p-3 rounded-lg font-bold hover:bg-blue-700 shadow-md transition-all">
             {loading ? "Cargando..." : "Registrarse"}
           </button>
         </form>
-
         <div className="mt-6 text-center">
-          <Link to="/login" className="text-sm text-blue-600 hover:text-blue-800 font-semibold hover:underline">
-            ¿Ya tienes cuenta? Inicia sesión aquí
-          </Link>
+          <Link to="/login" className="text-sm text-blue-600 font-semibold hover:underline">¿Ya tienes cuenta? Inicia sesión aquí</Link>
         </div>
       </div>
     </div>

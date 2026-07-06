@@ -1,97 +1,65 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
-// Páginas Públicas
+import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Unauthorized from "../pages/Unauthorized";
+import RoleRoute from "./RoleRoute";
+import DashboardLayout from "../layouts/DashboardLayout";
 
-// Dashboards principales
+// Admin
 import AdminDashboard from "../pages/admin/AdminDashboard";
-import CoachDashboard from "../pages/coach/CoachDashboard";
-import UserDashboard from "../pages/user/UserDashboard";
-
-// Flujos de Admin (Base Obligatoria + Nuevos)
 import UsersPage from "../pages/admin/UsersPage";
 import SportsPage from "../pages/admin/SportsPage";
 import SalasPage from "../pages/admin/SalasPage";
 import AsignacionesPage from "../pages/admin/AsignacionesPage";
 import HorariosPage from "../pages/admin/HorariosPage";
 
-// Flujos de Coach
+// Coach
+import CoachDashboard from "../pages/coach/CoachDashboard";
 import MisClasesPage from "../pages/coach/MisClasesPage";
 
-// Flujos de Usuario
+// User
+import UserDashboard from "../pages/user/UserDashboard";
 import ClasesDisponiblesPage from "../pages/user/ClasesDisponiblesPage";
 import MisReservasPage from "../pages/user/MisReservasPage";
 
-// Componentes de Seguridad
-import ProtectedRoute from "./ProtectedRoute";
-import RoleRoute from "./RoleRoute";
-
-function AppRoutes() {
+const AppRoutes = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Rutas Públicas */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/unauthorized" element={<Unauthorized />} />
+    <Routes>
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/unauthorized" element={<Unauthorized />} />
 
-        {/* Rutas de Usuario */}
-        <Route 
-          path="/user/*" 
-          element={
-            <RoleRoute allowedRoles={["user"]}>
-              <Routes>
-                <Route path="dashboard" element={<UserDashboard />} />
-                {/* Flujo 6 y 7 apuntan a la misma vista que tiene el botón de reservar */}
-                <Route path="clases-disponibles" element={<ClasesDisponiblesPage />} />
-                <Route path="crear-reserva" element={<ClasesDisponiblesPage />} />
-                {/* Flujo 8 */}
-                <Route path="mis-reservas" element={<MisReservasPage />} />
-              </Routes>
-            </RoleRoute>
-          } 
-        />
-        
-        {/* Rutas de Coach */}
-        <Route 
-          path="/coach/*" 
-          element={
-            <RoleRoute allowedRoles={["coach"]}>
-              <Routes>
-                <Route path="dashboard" element={<CoachDashboard />} />
-                {/* Flujo 4 y 5 apuntan a la vista unificada del Coach */}
-                <Route path="clases" element={<MisClasesPage />} />
-                <Route path="horario" element={<MisClasesPage />} />
-              </Routes>
-            </RoleRoute>
-          } 
-        />
+      {/* RUTAS DE ADMINISTRADOR */}
+      <Route path="/admin" element={<RoleRoute allowedRoles={["admin"]}><DashboardLayout role="admin" /></RoleRoute>}>
+        <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="users" element={<UsersPage />} />
+        <Route path="sports" element={<SportsPage />} />
+        <Route path="salas" element={<SalasPage />} />
+        <Route path="asignaciones" element={<AsignacionesPage />} />
+        <Route path="horarios" element={<HorariosPage />} />
+      </Route>
 
-        {/* Rutas de Admin */}
-        <Route 
-          path="/admin/*" 
-          element={
-            <RoleRoute allowedRoles={["admin"]}>
-              <Routes>
-                <Route path="dashboard" element={<AdminDashboard />} />
-                {/* Base Obligatoria */}
-                <Route path="users" element={<UsersPage />} />
-                <Route path="sports" element={<SportsPage />} />
-                {/* Flujos 1, 2 y 3 */}
-                <Route path="salas" element={<SalasPage />} />
-                <Route path="asignaciones" element={<AsignacionesPage />} />
-                <Route path="horarios" element={<HorariosPage />} />
-              </Routes>
-            </RoleRoute>
-          } 
-        />
-      </Routes>
-    </BrowserRouter>
+      {/* RUTAS DE COACH */}
+      <Route path="/coach" element={<RoleRoute allowedRoles={["coach"]}><DashboardLayout role="coach" /></RoleRoute>}>
+        <Route path="dashboard" element={<CoachDashboard />} />
+        <Route path="clases" element={<MisClasesPage />} />
+        <Route path="horario" element={<MisClasesPage />} />
+      </Route>
+
+      {/* RUTAS DE USUARIO */}
+      <Route path="/user" element={<RoleRoute allowedRoles={["user"]}><DashboardLayout role="user" /></RoleRoute>}>
+        <Route path="dashboard" element={<UserDashboard />} />
+        <Route path="clases-disponibles" element={<ClasesDisponiblesPage />} />
+        <Route path="crear-reserva" element={<ClasesDisponiblesPage />} />
+        <Route path="mis-reservas" element={<MisReservasPage />} />
+      </Route>
+
+      {/* Ruta comodín si el usuario escribe algo mal */}
+      <Route path="*" element={<Navigate to="/login" replace />} />
+    </Routes>
   );
-}
+};
 
 export default AppRoutes;

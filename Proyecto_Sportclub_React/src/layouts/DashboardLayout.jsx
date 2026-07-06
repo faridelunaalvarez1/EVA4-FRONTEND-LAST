@@ -1,85 +1,87 @@
 import React from "react";
-import { Container, Row, Col, Nav, Button } from "react-bootstrap";
-import { useNavigate, useLocation } from "react-router-dom";
+import { Outlet, useNavigate, Link } from "react-router-dom";
 import { logout } from "../services/authService";
 
-function DashboardLayout({ children, role, title }) {
+const DashboardLayout = ({ role }) => {
   const navigate = useNavigate();
-  const location = useLocation();
 
-  // Mapeo de colores según el rol usando clases de Bootstrap
-  const sidebarColors = {
-    admin: "bg-danger",
-    coach: "bg-success",
-    user: "bg-primary"
-  };
-
-  const bgColorClass = sidebarColors[role] || "bg-dark";
-
+  // Función para cerrar sesión
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
 
-  // Función para darle el fondo blanco transparente al enlace activo
-  const getLinkClass = (path) => {
-    return location.pathname === path 
-      ? "text-white bg-opacity-25 bg-white rounded fw-bold" 
-      : "text-white";
+  // Colores dinámicos para cumplir la rúbrica de UX/UI
+  const getRoleColor = () => {
+    if (role === "admin") return "bg-red-800";
+    if (role === "coach") return "bg-blue-800";
+    return "bg-green-700"; // usuario normal
+  };
+
+  // Enlaces del menú lateral dinámicos
+  const getRoleLinks = () => {
+    if (role === "admin") return [
+      { path: "/admin/dashboard", label: "Inicio Admin" },
+      { path: "/admin/users", label: "Gestión de Usuarios" },
+      { path: "/admin/sports", label: "Gestión Deportes" },
+      { path: "/admin/salas", label: "Gestión Salas" },
+      { path: "/admin/asignaciones", label: "Asignaciones" },
+      { path: "/admin/horarios", label: "Horarios" }
+    ];
+    if (role === "coach") return [
+      { path: "/coach/dashboard", label: "Inicio Coach" },
+      { path: "/coach/clases", label: "Mis Clases" }
+    ];
+    return [
+      { path: "/user/dashboard", label: "Inicio Usuario" },
+      { path: "/user/clases-disponibles", label: "Clases Disponibles" },
+      { path: "/user/mis-reservas", label: "Mis Reservas" }
+    ];
   };
 
   return (
-    <Container fluid className="vh-100 d-flex flex-column p-0">
-      <Row className="flex-grow-1 m-0">
-        {/* Sidebar */}
-        <Col md={2} className={`${bgColorClass} text-white p-3 d-flex flex-column shadow-sm`}>
-          <h4 className="text-center mb-4 mt-2 border-bottom pb-2">SportClub</h4>
-          
-          <Nav className="flex-column flex-grow-1 gap-2">
-            {role === "admin" && (
-              <>
-                <Nav.Link className={getLinkClass("/admin/dashboard")} onClick={() => navigate("/admin/dashboard")}>Inicio</Nav.Link>
-                <Nav.Link className={getLinkClass("/admin/users")} onClick={() => navigate("/admin/users")}>Gestión de Usuarios</Nav.Link>
-                <Nav.Link className={getLinkClass("/admin/sports")} onClick={() => navigate("/admin/sports")}>Gestión de Deportes</Nav.Link>
-                <Nav.Link className={getLinkClass("/admin/salas")} onClick={() => navigate("/admin/salas")}>Gestión de Salas</Nav.Link>
-                <Nav.Link className={getLinkClass("/admin/asignaciones")} onClick={() => navigate("/admin/asignaciones")}>Gestión de Asignaciones</Nav.Link>
-                <Nav.Link className={getLinkClass("/admin/horarios")} onClick={() => navigate("/admin/horarios")}>Gestión de Horarios</Nav.Link>
-              </>
-            )}
-            
-            {role === "coach" && (
-              <>
-                <Nav.Link className={getLinkClass("/coach/dashboard")} onClick={() => navigate("/coach/dashboard")}>Inicio</Nav.Link>
-                <Nav.Link className={getLinkClass("/coach/clases")} onClick={() => navigate("/coach/clases")}>Mis Clases</Nav.Link>
-                <Nav.Link className={getLinkClass("/coach/horario")} onClick={() => navigate("/coach/horario")}>Mi Horario</Nav.Link>
-              </>
-            )}
-            
-            {role === "user" && (
-              <>
-                <Nav.Link className={getLinkClass("/user/dashboard")} onClick={() => navigate("/user/dashboard")}>Inicio</Nav.Link>
-                <Nav.Link className={getLinkClass("/user/clases-disponibles")} onClick={() => navigate("/user/clases-disponibles")}>Clases Disponibles</Nav.Link>
-                <Nav.Link className={getLinkClass("/user/crear-reserva")} onClick={() => navigate("/user/crear-reserva")}>Crear Reserva</Nav.Link>
-                <Nav.Link className={getLinkClass("/user/mis-reservas")} onClick={() => navigate("/user/mis-reservas")}>Mis Reservas</Nav.Link>
-              </>
-            )}
-          </Nav>
-
-          <Button variant="outline-light" className="mt-auto w-100 fw-bold" onClick={handleLogout}>
-            Cerrar sesión
-          </Button>
-        </Col>
-
-        {/* Contenido Principal */}
-        <Col md={10} className="p-4 bg-light overflow-auto">
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h2 className="text-dark m-0 fw-bold">{title}</h2>
+    <div className="flex h-screen bg-gray-100 font-sans">
+      {/* Menú Lateral (Sidebar) */}
+      <aside className={`w-64 text-white flex flex-col shadow-xl ${getRoleColor()}`}>
+        <div className="p-6 text-center border-b border-white/20">
+          <h2 className="text-2xl font-bold tracking-wider">SportClub</h2>
+          <div className="text-xs font-semibold uppercase mt-1 opacity-75">
+            Panel de {role}
           </div>
-          {children}
-        </Col>
-      </Row>
-    </Container>
+        </div>
+        
+        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+          {getRoleLinks().map((link) => (
+            <Link 
+              key={link.path} 
+              to={link.path} 
+              className="block px-4 py-3 rounded-lg hover:bg-white/20 transition-all font-medium"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Botón Salir */}
+        <div className="p-4 border-t border-white/20">
+          <button 
+            onClick={handleLogout} 
+            className="w-full bg-black/30 hover:bg-black/50 py-3 rounded-lg text-white font-bold transition-all shadow-md"
+          >
+            Cerrar Sesión
+          </button>
+        </div>
+      </aside>
+
+      {/* Contenido Principal de las Páginas */}
+      <main className="flex-1 overflow-y-auto p-8 bg-gray-50">
+        <div className="bg-white rounded-xl shadow-sm p-6 min-h-full border border-gray-100">
+           {/* Aquí se inyectan dinámicamente las páginas (Salas, Usuarios, etc) */}
+          <Outlet /> 
+        </div>
+      </main>
+    </div>
   );
-}
+};
 
 export default DashboardLayout;

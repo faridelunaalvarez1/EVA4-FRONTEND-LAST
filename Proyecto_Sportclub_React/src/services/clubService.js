@@ -1,5 +1,3 @@
-
-
 const API_URL = "/api";
 
 // Función auxiliar para obtener los encabezados (headers)
@@ -91,7 +89,7 @@ export const deleteHorario = async (id) => {
 // FLUJOS 4 Y 5: MIS CLASES (Coach)
 // ==========================================
 export const getMisClasesCoach = async () => {
-  const res = await fetch(`${API_URL}/coach/clases`, { headers: getHeaders() });
+  const res = await fetch(`${API_URL}/coach/my-classes`, { headers: getHeaders() });
   return handleResponse(res);
 };
 
@@ -99,11 +97,11 @@ export const getMisClasesCoach = async () => {
 // FLUJOS 6 Y 7: CLASES DISPONIBLES Y RESERVAR (Usuario)
 // ==========================================
 export const getClasesDisponibles = async () => {
-  const res = await fetch(`${API_URL}/clases-disponibles`, { headers: getHeaders() });
+  const res = await fetch(`${API_URL}/member/classes`, { headers: getHeaders() });
   return handleResponse(res);
 };
-export const crearReserva = async (claseId) => {
-  const res = await fetch(`${API_URL}/reservas`, { method: "POST", headers: getHeaders(), body: JSON.stringify({ claseId }) });
+export const crearReserva = async (classScheduleId) => {
+  const res = await fetch(`${API_URL}/reservations`, { method: "POST", headers: getHeaders(), body: JSON.stringify({ class_schedule_id: classScheduleId }) });
   return handleResponse(res);
 };
 
@@ -111,10 +109,10 @@ export const crearReserva = async (claseId) => {
 // FLUJO 8: MIS RESERVAS Y CANCELAR (Usuario)
 // ==========================================
 export const getMisReservas = async () => {
-  const res = await fetch(`${API_URL}/mis-reservas`, { headers: getHeaders() });
+  const res = await fetch(`${API_URL}/reservations`, { headers: getHeaders() });
   return handleResponse(res);
 };
 export const cancelarReserva = async (reservaId) => {
-  const res = await fetch(`${API_URL}/reservas/${reservaId}`, { method: "DELETE", headers: getHeaders() });
+  const res = await fetch(`${API_URL}/reservations/${reservaId}/cancel`, { method: "PATCH", headers: getHeaders() });
   return handleResponse(res);
 };

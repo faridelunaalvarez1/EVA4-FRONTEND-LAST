@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Container, Card, Form, Button, Alert } from "react-bootstrap";
 import Swal from "sweetalert2";
@@ -23,7 +23,7 @@ const Register = () => {
       if (!response.ok) {
         throw new Error(data.message || "Error al registrarse");
       }
-      await Swal.fire("¡Registro exitoso!", "Ahora puedes iniciar sesión.", "success");
+      await Swal.fire("Registro exitoso", "Ahora puedes iniciar sesion.", "success");
       navigate("/login");
     } catch (err) {
       setError(err.message);
@@ -45,3 +45,47 @@ const Register = () => {
           {error && <Alert variant="danger">{error}</Alert>}
 
           <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Control
+                type="text"
+                placeholder="Nombre completo"
+                required
+                onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Control
+                type="email"
+                placeholder="Correo electronico"
+                required
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Control
+                type="password"
+                placeholder="Contrasena"
+                required
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              />
+            </Form.Group>
+
+            <Button type="submit" variant="primary" className="w-100 fw-bold" disabled={loading}>
+              {loading ? "Cargando..." : "Registrarse"}
+            </Button>
+          </Form>
+
+          <div className="mt-4 text-center">
+            <Link to="/login" className="fw-semibold">
+              Ya tienes cuenta? Inicia sesion aqui
+            </Link>
+          </div>
+        </Card.Body>
+      </Card>
+    </Container>
+  );
+};
+
+export default Register;

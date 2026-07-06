@@ -1,18 +1,14 @@
 import React from "react";
-import DashboardLayout from "../../layouts/DashboardLayout";
-import UsersPage from "./UsersPage";
 
-function AdminDashboard() {
+const AdminDashboard = () => {
   return (
-    <DashboardLayout role="admin" title="Panel de Administración">
-      <p className="text-muted mb-4">
-        Bienvenido a la sección exclusiva para administradores de SportClub.
+    <div className="p-6 text-center">
+      <h1 className="text-4xl font-bold text-gray-800 mb-4">Bienvenido al Panel de Administración</h1>
+      <p className="text-lg text-gray-600">
+        Desde el menú lateral puedes gestionar usuarios, deportes, salas, asignaciones y horarios.
       </p>
-      
-      {/* Tu tabla de usuarios se verá perfectamente integrada aquí */}
-      <UsersPage />
-    </DashboardLayout>
+    </div>
   );
-}
+};
 
 export default AdminDashboard;

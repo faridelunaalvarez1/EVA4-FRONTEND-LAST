@@ -1,4 +1,4 @@
-const API_URL = "/api/users";
+﻿const API_URL = "/api/users";
 
 function getToken() {
   return localStorage.getItem("token");
@@ -9,6 +9,16 @@ function getHeaders() {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${getToken()}`
   };
+}
+
+function construirMensajeError(data, mensajePorDefecto) {
+  if (data && data.errors && typeof data.errors === "object") {
+    const detalles = Object.values(data.errors).filter(Boolean);
+    if (detalles.length > 0) {
+      return detalles.join(" ");
+    }
+  }
+  return (data && data.message) || mensajePorDefecto;
 }
 
 // Listar usuarios (GET)
@@ -32,7 +42,7 @@ export async function createUser(userData) {
   });
   const data = await response.json();
   if (!response.ok) {
-    throw new Error(data.message || "Error al crear usuario");
+    throw new Error(construirMensajeError(data, "Error al crear usuario"));
   }
   return data;
 }
@@ -46,7 +56,7 @@ export async function updateUser(id, userData) {
   });
   const data = await response.json();
   if (!response.ok) {
-    throw new Error(data.message || "Error al actualizar usuario");
+    throw new Error(construirMensajeError(data, "Error al actualizar usuario"));
   }
   return data;
 }

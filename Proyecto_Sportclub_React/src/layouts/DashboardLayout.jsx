@@ -12,14 +12,14 @@ const DashboardLayout = ({ role }) => {
 
   const getRoleStyle = () => {
     if (role === "admin") return { backgroundColor: "#a12a2a" };
-    if (role === "coach") return { backgroundColor: "#1e5aa8" };
-    return { backgroundColor: "#1a7a4c" };
+    if (role === "coach") return { backgroundColor: "#1a7a4c" };
+    return { backgroundColor: "#1e5aa8" };
   };
 
   const getContentBg = () => {
     if (role === "admin") return "#f7e9e9";
-    if (role === "coach") return "#e8eef6";
-    return "#e8f3ec";
+    if (role === "coach") return "#e8f3ec";
+    return "#e8eef6";
   };
 
   const getRoleLinks = () => {

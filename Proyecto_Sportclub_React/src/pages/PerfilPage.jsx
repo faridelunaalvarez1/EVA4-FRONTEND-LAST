@@ -26,6 +26,20 @@ const formatFecha = (fecha) => {
   return d.toLocaleDateString("es-CL");
 };
 
+// El backend a veces devuelve metadata como objeto y a veces como
+// un string con JSON adentro. Esta funcion normaliza ambos casos.
+const parseMetadata = (metadata) => {
+  if (!metadata) return {};
+  if (typeof metadata === "string") {
+    try {
+      return JSON.parse(metadata);
+    } catch (e) {
+      return {};
+    }
+  }
+  return metadata;
+};
+
 const PerfilPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -65,6 +79,7 @@ const PerfilPage = () => {
     try {
       const response = await getMe();
       const user = response.data || response;
+      const metadata = parseMetadata(user.metadata);
 
       setUserId(user.id);
       setRole(user.role || "user");
@@ -74,10 +89,8 @@ const PerfilPage = () => {
         full_name: user.full_name || "",
         email: user.email || "",
         birth_date: user.birth_date ? user.birth_date.substring(0, 10) : "",
-        sport: user.metadata && user.metadata.sports && user.metadata.sports[0]
-          ? user.metadata.sports[0].name
-          : "",
-        otros: user.metadata && user.metadata.otros ? user.metadata.otros : ""
+        sport: metadata.sports && metadata.sports[0] ? metadata.sports[0].name : "",
+        otros: metadata.otros || ""
       };
 
       setFormData(datos);
@@ -216,7 +229,6 @@ const PerfilPage = () => {
       </div>
 
       <div className="row g-4">
-        {/* Columna izquierda: tarjeta de avatar */}
         <div className="col-12 col-lg-4">
           <div className="card shadow-sm h-100">
             <div className="card-body text-center">
@@ -266,7 +278,6 @@ const PerfilPage = () => {
           </div>
         </div>
 
-        {/* Columna derecha: informacion personal + contrasena */}
         <div className="col-12 col-lg-8">
           <div className="card shadow-sm mb-4">
             <div className="card-body">

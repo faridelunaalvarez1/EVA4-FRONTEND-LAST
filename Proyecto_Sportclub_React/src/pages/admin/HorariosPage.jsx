@@ -4,6 +4,8 @@ import Swal from "sweetalert2";
 import HorarioFormModal from "../../components/horarios/HorarioFormModal";
 import { getHorarios, createHorario, updateHorario, deleteHorario } from "../../services/clubService";
 
+const DIAS_LABEL = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+
 function HorariosPage() {
   const [horarios, setHorarios] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,6 +34,15 @@ function HorariosPage() {
     if (res.isConfirmed) { await deleteHorario(horario.id); Swal.fire("Eliminado", "", "success"); loadData(); }
   };
 
+  const describirAsignacion = (h) => {
+    const sr = h.sport_room;
+    if (!sr) return "-";
+    const deporte = sr.sport?.name || "Deporte";
+    const sala = sr.room?.name || "Sala";
+    const coach = sr.coach?.full_name || "Coach";
+    return `${deporte} - ${sala} - ${coach}`;
+  };
+
   return (
     <Container className="bg-white p-4 rounded shadow-sm">
       <div className="d-flex justify-content-between mb-3">
@@ -41,12 +52,15 @@ function HorariosPage() {
       {loading ? <Spinner animation="border" variant="danger" /> : (
         <Table striped bordered hover responsive className="align-middle">
           <thead className="table-danger">
-            <tr><th>Día</th><th>Inicio</th><th>Fin</th><th className="text-center">Acciones</th></tr>
+            <tr><th>Asignación</th><th>Día</th><th>Inicio</th><th>Fin</th><th className="text-center">Acciones</th></tr>
           </thead>
           <tbody>
             {horarios.map(h => (
               <tr key={h.id}>
-                <td className="fw-bold">{h.dia}</td><td>{h.inicio}</td><td>{h.fin}</td>
+                <td className="fw-bold">{describirAsignacion(h)}</td>
+                <td>{DIAS_LABEL[h.day_of_week] ?? h.day_of_week}</td>
+                <td>{h.start_time}</td>
+                <td>{h.end_time}</td>
                 <td className="text-center">
                   <Button variant="outline-danger" size="sm" className="me-2" onClick={() => { setSelectedHorario(h); setShowModal(true); }}>Editar</Button>
                   <Button variant="danger" size="sm" onClick={() => handleDelete(h)}>Eliminar</Button>

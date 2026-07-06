@@ -82,7 +82,7 @@ const Register = () => {
         password: formData.password,
         role: formData.role,
         birth_date: formData.birth_date,
-        metadata: { sports: [formData.sport_id.trim()] }
+        metadata: { sports: [{ name: formData.sport_id.trim() }] }
       };
 
       const response = await fetch("/api/auth/register", {

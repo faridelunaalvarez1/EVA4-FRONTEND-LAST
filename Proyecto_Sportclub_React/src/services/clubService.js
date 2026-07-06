@@ -31,19 +31,19 @@ const handleResponse = async (response) => {
 // FLUJO 1: SALAS (Admin)
 // ==========================================
 export const getSalas = async () => {
-  const res = await fetch(`${API_URL}/salas`, { headers: getHeaders() });
+  const res = await fetch(`${API_URL}/rooms`, { headers: getHeaders() });
   return handleResponse(res);
 };
 export const createSala = async (data) => {
-  const res = await fetch(`${API_URL}/salas`, { method: "POST", headers: getHeaders(), body: JSON.stringify(data) });
+  const res = await fetch(`${API_URL}/rooms`, { method: "POST", headers: getHeaders(), body: JSON.stringify(data) });
   return handleResponse(res);
 };
 export const updateSala = async (id, data) => {
-  const res = await fetch(`${API_URL}/salas/${id}`, { method: "PUT", headers: getHeaders(), body: JSON.stringify(data) });
+  const res = await fetch(`${API_URL}/rooms/${id}`, { method: "PUT", headers: getHeaders(), body: JSON.stringify(data) });
   return handleResponse(res);
 };
 export const deleteSala = async (id) => {
-  const res = await fetch(`${API_URL}/salas/${id}`, { method: "DELETE", headers: getHeaders() });
+  const res = await fetch(`${API_URL}/rooms/${id}`, { method: "DELETE", headers: getHeaders() });
   return handleResponse(res);
 };
 
